@@ -6,7 +6,6 @@ export default class LoginPage extends Component {
 
 
     constructor(props){
-
         super(props);
 
         this.onChangeUsername = this.onChangeUsername.bind(this);
@@ -52,10 +51,10 @@ export default class LoginPage extends Component {
             <Col></Col>
             <Col>
 
-            <Form>
+            <Form onSubmit={this.onSubmit}>
                 <Form.Group controlId="Username">
                 {/* <Form.Label>Email</Form.Label> */}
-                <Form.Control type="text" placeholder="Username" />
+                <Form.Control onChange={this.onChangeUsername} type="text" placeholder="Username" />
                 {/* <Form.Text className="text-muted">
                     We'll never share your email with anyone else.
                 </Form.Text> */}
@@ -63,7 +62,7 @@ export default class LoginPage extends Component {
             
                 <Form.Group controlId="Password">
                 {/* <Form.Label>Password</Form.Label> */}
-                <Form.Control type="password" placeholder="Password" />
+                <Form.Control onChange={this.onChangePassword} type="password" placeholder="Password" />
                 </Form.Group>
 
                 {/* <Form.Group controlId="formBasicCheckbox">
