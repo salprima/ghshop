@@ -19,13 +19,14 @@ import ProductDetailPage from "./components/product-detail.component";
 import IndexPage from "./components/index.component";
 import LoginPage from "./components/login.component";
 import CartPage from "./components/cart.component";
+import AboutPage from "./components/about.component";
 
 function App() {
   return (
   
   <Router>
     <div className="App">
-      {/* <header className="App-header"> */}
+
         <Navbar bg="dark" variant="dark">
           <Container>
 
@@ -58,7 +59,6 @@ function App() {
 
           </Container>
         </Navbar>
-      {/* </header> */}
 
       <Container>
         <Row>
@@ -70,11 +70,13 @@ function App() {
                 <Route path="/signin" component={LoginPage} />
                 <Route path="/product/detail/:prdno" component={ProductDetailPage} />
                 <Route path="/cart" component={CartPage} />
+                <Route path="/about" component={AboutPage} />
               </Switch>
             </div>
           </Col>
         </Row>
       </Container>
+
     </div>
   </Router>
   
@@ -82,33 +84,3 @@ function App() {
 }
 
 export default App;
-
-/*
-import React from 'react';
-import logo from './logo.svg';
-import 'bootstrap/dist/css/bootstrap.css';
-import './App.css';
-
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
-
-export default App;
-*/
