@@ -11,12 +11,14 @@ import "./App.css";
 
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 
-import CreateStudent from "./components/create-student.component";
-import EditStudent from "./components/edit-student.component";
-import StudentList from "./components/student-list.component";
+// import CreateStudent from "./components/create-student.component";
+// import EditStudent from "./components/edit-student.component";
+// import StudentList from "./components/student-list.component";
 import ProductList from "./components/product-list.component";
+import ProductDetailPage from "./components/product-detail.component";
 import IndexPage from "./components/index.component";
 import LoginPage from "./components/login.component";
+import CartPage from "./components/cart.component";
 
 function App() {
   return (
@@ -41,16 +43,16 @@ function App() {
               </Nav>
 
               <Nav>
+                <Link to={"/cart"} className="nav-link">
+                  Cart
+                </Link>
+              </Nav>
+
+              <Nav>
                 <Link to={"/signin"} className="nav-link">
                   Login
                 </Link>
               </Nav>
-
-              {/* <Nav>
-                <Link to={"/student-list"} className="nav-link">
-                  Student List
-                </Link>
-              </Nav> */}
 
             </Nav>
 
@@ -66,7 +68,8 @@ function App() {
                 <Route exact path='/' component={IndexPage} />
                 <Route path="/product-list" component={ProductList} />
                 <Route path="/signin" component={LoginPage} />
-                {/* <Route path="/student-list" component={ProductList} /> */}
+                <Route path="/product/detail/:prdno" component={ProductDetailPage} />
+                <Route path="/cart" component={CartPage} />
               </Switch>
             </div>
           </Col>

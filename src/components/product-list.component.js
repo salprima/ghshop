@@ -19,12 +19,16 @@ export default class ProductList extends Component {
     constructor(props) {
         super(props);
         this.pageChanged = this.pageChanged.bind(this);
-        this.searchProduct = this.searchProduct.bind(this);
+        this.onChangeSearchProduct = this.onChangeSearchProduct.bind(this);
+        this.onClickSearchButton = this.onClickSearchButton.bind(this);
+        this.onClickProductDetail = this.onClickProductDetail.bind(this);
     }
 
     state = {
         paging : {},
-        productList : []
+        productList : [],
+        searchProduct : '',
+        prdDetailLink: ''
     }
 
     componentWillMount() {
@@ -32,7 +36,7 @@ export default class ProductList extends Component {
     }
 
     componentDidMount(){
-        const url = `${API_URL}/product/list/1/2`;
+        const url = `${API_URL}/product/list/1/3`;
         Axios.post(url)
             .then(response => response.data)
             .then((data) => {
@@ -45,7 +49,14 @@ export default class ProductList extends Component {
         console.log(e.target.text);
         let pageNo = parseInt(e.target.text);
 
-        const url = `${API_URL}/product/list/${pageNo}/2`;
+        let search = this.state.searchProduct;
+        let searchStr = '';
+        if(search)
+            searchStr = '?search='+search;
+
+        console.log(searchStr);
+
+        const url = `${API_URL}/product/list/${pageNo}/3${searchStr}`;
         Axios.post(url)
             .then(response => response.data)
             .then((data) => {
@@ -55,8 +66,32 @@ export default class ProductList extends Component {
             })
     }
 
-    searchProduct(){
-        
+    onChangeSearchProduct(e){
+        console.log(e.target.value);
+        this.setState({searchProduct: e.target.value})
+    }
+
+    onClickSearchButton(){
+        let search = this.state.searchProduct;
+        let searchStr = '';
+        if(search)
+            searchStr = '?search='+search;
+
+        console.log(searchStr);
+
+        const url = `${API_URL}/product/list/1/3${searchStr}`;
+        Axios.post(url)
+            .then(response => response.data)
+            .then((data) => {
+                this.setState({ paging : data, productList :  data.docs})
+                console.log(this.state.paging)
+            })
+    }
+
+    onClickProductDetail(prdNo){
+        console.log("prdNo: " + prdNo);
+        this.setState({prdDetailLink : `/product/detail/${prdNo}`});
+        this.props.history.push(`/product/detail/${prdNo}`);
     }
 
     render() {
@@ -73,7 +108,7 @@ export default class ProductList extends Component {
         }
 
         const productList = this.state.productList.map((prd, idx) => 
-            <Col>
+            <Col key={idx}>
                 <Card style={{ width: '18rem' }}>
                     <Card.Img variant="top" src={prd.image} />
                     <Card.Body>
@@ -84,7 +119,7 @@ export default class ProductList extends Component {
                             {prd.desc}
                         </Card.Text>
                         <span>
-                            <Button variant="primary">Details</Button>
+                            <Button onClick={(prdNo) => this.onClickProductDetail(`${prd.prdNo}`)} variant="primary" >Details</Button>
                                 &nbsp;
                             <Button variant="success">Add to cart</Button>
                         </span>
@@ -112,9 +147,9 @@ export default class ProductList extends Component {
                 <Row>
                     <Col>
                     <InputGroup className="mb-3">
-                        <FormControl placeholder="Find Your favourite products..." aria-describedby="basic-addon1" />
+                        <FormControl onChange={this.onChangeSearchProduct} placeholder="Find Your favourite products..." aria-describedby="basic-addon1" />
                         <InputGroup.Append>
-                            <Button variant="outline-secondary">Search</Button>
+                            <Button onClick={this.onClickSearchButton} variant="outline-secondary">Search</Button>
                         </InputGroup.Append>
                     </InputGroup>
                     </Col>
