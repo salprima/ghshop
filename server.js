@@ -58,6 +58,20 @@ app.post('/api/user/create', function (req, res) {
 
  });
 
+ app.get('/api/product/:prdno', function (req, res) {
+
+    const pNo = parseInt(req.params.prdno);
+
+    Product.findOne({ prdNo : pNo}, (err, product) => {
+      if(!err){
+        if(product){
+          return res.json(product);
+        } else {
+          return res.json({});
+        }
+      }
+    });
+ });
 
  app.post('/api/product/list/:page/:size', function (req, res) {
 
