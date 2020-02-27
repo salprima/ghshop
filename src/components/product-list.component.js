@@ -1,16 +1,8 @@
 import React, { Component } from "react";
-import Card from 'react-bootstrap/Card';
-import Button from 'react-bootstrap/Button';
-import Breadcrumb from 'react-bootstrap/Breadcrumb';
-import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
-import Pagination from 'react-bootstrap/Pagination';
-import InputGroup from 'react-bootstrap/InputGroup';
-import FormControl from 'react-bootstrap/FormControl';
+import { Card, Button, Breadcrumb, Container, Row, Col, Pagination, InputGroup, FormControl, Alert } from 'react-bootstrap';
 import Axios from 'axios';
 import NumberFormat from 'react-number-format';
-const API_URL = 'http://localhost:8080/api';
+import config from 'react-global-configuration';
 
 
 
@@ -22,13 +14,15 @@ export default class ProductList extends Component {
         this.onChangeSearchProduct = this.onChangeSearchProduct.bind(this);
         this.onClickSearchButton = this.onClickSearchButton.bind(this);
         this.onClickProductDetail = this.onClickProductDetail.bind(this);
+        this.onClickAddToCart = this.onClickAddToCart.bind(this);
     }
 
     state = {
         paging : {},
         productList : [],
         searchProduct : '',
-        prdDetailLink: ''
+        prdDetailLink: '',
+        cartAlert: <div></div>
     }
 
     componentWillMount() {
@@ -36,7 +30,7 @@ export default class ProductList extends Component {
     }
 
     componentDidMount(){
-        const url = `${API_URL}/product/list/1/3`;
+        const url = `${config.get('apiurl')}/product/list/1/3`;
         Axios.post(url)
             .then(response => response.data)
             .then((data) => {
@@ -56,7 +50,7 @@ export default class ProductList extends Component {
 
         console.log(searchStr);
 
-        const url = `${API_URL}/product/list/${pageNo}/3${searchStr}`;
+        const url = `${config.get('apiurl')}/product/list/${pageNo}/3${searchStr}`;
         Axios.post(url)
             .then(response => response.data)
             .then((data) => {
@@ -79,7 +73,7 @@ export default class ProductList extends Component {
 
         console.log(searchStr);
 
-        const url = `${API_URL}/product/list/1/3${searchStr}`;
+        const url = `${config.get('apiurl')}/product/list/1/3${searchStr}`;
         Axios.post(url)
             .then(response => response.data)
             .then((data) => {
@@ -93,6 +87,29 @@ export default class ProductList extends Component {
         this.setState({prdDetailLink : `/product/detail/${prdNo}`});
         this.props.history.push(`/product/detail/${prdNo}`);
     }
+
+    onClickAddToCart(prdNo, prdName, prdPrice){
+
+        if(!localStorage.getItem('loggedInUser')){
+            this.setState({cartAlert : 
+                <Alert variant="danger" dismissible>
+                    <Alert.Heading>You need to login!</Alert.Heading>
+                </Alert>
+            })
+            return;
+        }
+
+        let cart = [];
+        cart = !localStorage.getItem('cart') ? [] : JSON.parse(localStorage.getItem('cart'));
+        
+        cart.push({prdNo : prdNo, prdName : prdName, prdPrice : prdPrice, prdQty : 1});
+        console.log(cart);
+
+        localStorage.setItem('cart', JSON.stringify(cart));
+        console.log(localStorage.getItem('cart'));
+
+    }
+      
 
     render() {
 
@@ -121,13 +138,15 @@ export default class ProductList extends Component {
                         <span>
                             <Button onClick={(prdNo) => this.onClickProductDetail(`${prd.prdNo}`)} variant="primary" >Details</Button>
                                 &nbsp;
-                            <Button variant="success">Add to cart</Button>
+                            <Button onClick={(prdNo, prdName, prdPrice) => this.onClickAddToCart(`${prd.prdNo}`, `${prd.name}`, `${prd.price}`)} variant="success">Add to cart</Button>
                         </span>
                     </Card.Body>
                 </Card> 
             </Col>
         
         );
+
+        // const addCartAlert = this.state.cartAlert;
 
         return (
 
@@ -152,6 +171,12 @@ export default class ProductList extends Component {
                             <Button onClick={this.onClickSearchButton} variant="outline-secondary">Search</Button>
                         </InputGroup.Append>
                     </InputGroup>
+                    </Col>
+                </Row>
+
+                <Row>
+                    <Col>
+                        {this.state.cartAlert}
                     </Col>
                 </Row>
 

@@ -3,6 +3,28 @@ import { Carousel, Container, Row, Col } from 'react-bootstrap';
 
 export default class IndexPage extends Component {
 
+    constructor(props) {
+        super(props);
+    }
+
+    // state = {
+    //     reloaded : false
+    // }
+
+    componentDidMount(){
+
+        if(!localStorage.getItem('indexReload')){
+            window.location.reload();
+            localStorage.setItem('indexReload', true);
+        }
+
+        // this.setState({reloaded: true});
+    }
+
+    componentWillUnmount(){
+        localStorage.removeItem('indexReload');
+    }
+
     render() {
         return (
 

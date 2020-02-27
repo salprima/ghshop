@@ -7,6 +7,9 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import "bootstrap/dist/css/bootstrap.css";
 
+import config from 'react-global-configuration';
+import configuration from './config';
+
 import "./App.css";
 
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
@@ -18,10 +21,32 @@ import ProductList from "./components/product-list.component";
 import ProductDetailPage from "./components/product-detail.component";
 import IndexPage from "./components/index.component";
 import LoginPage from "./components/login.component";
+import LogoutPage from "./components/logout.component";
 import CartPage from "./components/cart.component";
 import AboutPage from "./components/about.component";
 
+// import { isLoggedIn } from "./util/auth.util";
+
 function App() {
+
+  config.set(configuration);
+
+  const isLoggedIn = !localStorage.getItem('loggedInUser');
+  const loginLink = isLoggedIn ? 
+        <Nav>
+        <Link to={"/signin"} className="nav-link">
+          Login
+        </Link>
+        </Nav>
+        :
+        <Nav>
+        <Link to={"/signout"} className="nav-link">
+        Logout
+        </Link>
+        </Nav>
+        ;
+    
+
   return (
   
   <Router>
@@ -50,9 +75,7 @@ function App() {
               </Nav>
 
               <Nav>
-                <Link to={"/signin"} className="nav-link">
-                  Login
-                </Link>
+                {loginLink}
               </Nav>
 
             </Nav>
@@ -68,6 +91,7 @@ function App() {
                 <Route exact path='/' component={IndexPage} />
                 <Route path="/product-list" component={ProductList} />
                 <Route path="/signin" component={LoginPage} />
+                <Route path="/signout" component={LogoutPage} />
                 <Route path="/product/detail/:prdno" component={ProductDetailPage} />
                 <Route path="/cart" component={CartPage} />
                 <Route path="/about" component={AboutPage} />

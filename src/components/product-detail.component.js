@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import {Jumbotron, Button, Container, Row, Col, Breadcrumb} from 'react-bootstrap';
 import Axios from 'axios';
 import NumberFormat from 'react-number-format';
-const API_URL = 'http://localhost:8080/api';
+import config from 'react-global-configuration';
 
 export default class ProductDetailPage extends Component {
 
@@ -16,7 +16,7 @@ export default class ProductDetailPage extends Component {
     }
 
     componentDidMount(){
-        const url = `${API_URL}/product/${this.state.prdNo}`;
+        const url = `${config.get('apiurl')}/product/${this.state.prdNo}`;
         Axios.get(url)
             .then(response => response.data)
             .then((data) => {

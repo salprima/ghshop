@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import { Form, Button, Container, Row, Col } from 'react-bootstrap';
-
+import { Form, Button, Container, Row, Col, Alert } from 'react-bootstrap';
+import { Redirect } from "react-router-dom";
 
 export default class LoginPage extends Component {
 
@@ -14,8 +14,16 @@ export default class LoginPage extends Component {
 
         this.state = {
             username: '',
-            password: ''
+            password: '',
+            error: false
         }
+    }
+
+    componentWillMount(){
+        let loggedInUser = localStorage.getItem('loggedInUser');
+        if(loggedInUser)
+            return (<Redirect to="/"/>)
+            // this.props.history.push('/');
     }
 
     onChangeUsername(e) {
@@ -34,11 +42,31 @@ export default class LoginPage extends Component {
         console.log(`Password: ${this.state.password}`);
     
         this.setState({username: '', password: ''});
+
+        const { username, password } = this.state;
+        const { history } = this.props;
+
+        if (!(username === 'alex' && password === '123')) {
+            return this.setState({ error: true });
+        }
+
+        localStorage.setItem('loggedInUser', username);
+        this.props.history.push('/');
     }
 
 
 
     render() {
+
+        let warning = (error) => {
+            if(error)
+                return (
+                    <Alert variant='danger'>
+                        Invalid credential!
+                    </Alert>
+                )
+        };
+
     return (
 
 
@@ -68,6 +96,8 @@ export default class LoginPage extends Component {
                 {/* <Form.Group controlId="formBasicCheckbox">
                 <Form.Check type="checkbox" label="Check me out" />
                 </Form.Group> */}
+
+                {warning(this.state.error)}
 
                 <Button variant="primary" type="submit">
                     Login
