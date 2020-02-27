@@ -92,7 +92,7 @@ export default class ProductList extends Component {
 
         if(!localStorage.getItem('loggedInUser')){
             this.setState({cartAlert : 
-                <Alert variant="danger" dismissible>
+                <Alert variant="danger">
                     <Alert.Heading>You need to login!</Alert.Heading>
                 </Alert>
             })
@@ -107,6 +107,7 @@ export default class ProductList extends Component {
 
         localStorage.setItem('cart', JSON.stringify(cart));
         console.log(localStorage.getItem('cart'));
+        alert(`${prdName} added to cart`)
 
     }
       

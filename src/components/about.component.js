@@ -48,6 +48,7 @@ export default class AboutPage extends Component {
                         </Card.Body>
                     </Accordion.Collapse>
                     </Card>
+
                     <Card>
                     <Card.Header>
                         <Accordion.Toggle as={Button} variant="link" eventKey="1">
@@ -73,6 +74,30 @@ export default class AboutPage extends Component {
                         </Card.Body>
                     </Accordion.Collapse>
                     </Card>
+
+                    <Card>
+                    <Card.Header>
+                        <Accordion.Toggle as={Button} variant="link" eventKey="2">
+                            Inspiring People
+                        </Accordion.Toggle>
+                    </Card.Header>
+                    <Accordion.Collapse eventKey="2">
+                        <Card.Body>
+                            <p style={{textAlign: 'left'}}>
+                                <ul>
+                                    <li>My Parents</li>
+                                    <li>Elon Musk - CEO Tesla, Inc. / Entrepreneur </li>
+                                    <li>Gary Vaynerchuk - CEO VaynerMedia / Entrepreneur </li>
+                                    <li>Simon Sinek - Book Author</li>
+                                    <li>Najwa Shihab - Founder narasi.tv </li>
+                                    <li>(Fiction) Aang - The Last Airbender</li>
+                                    <li>(Fiction) Hiccup Horrendous Haddock III - How to Train Your Dragon</li>
+                                </ul>
+                            </p>
+                        </Card.Body>
+                    </Accordion.Collapse>
+                    </Card>
+
                 </Accordion>
 
                 </Col>

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import {Jumbotron, Button, Container, Row, Col, Breadcrumb} from 'react-bootstrap';
+import {Jumbotron, Button, Container, Row, Col, Breadcrumb, Alert} from 'react-bootstrap';
 import Axios from 'axios';
 import NumberFormat from 'react-number-format';
 import config from 'react-global-configuration';
@@ -8,11 +8,13 @@ export default class ProductDetailPage extends Component {
 
     constructor(props) {
         super(props);
+        this.onClickAddToCart = this.onClickAddToCart.bind(this);
     }
 
     state = {
         prdNo : this.props.match.params.prdno,
-        product : {}
+        product : {},
+        cartAlert: <div></div>
     }
 
     componentDidMount(){
@@ -23,6 +25,29 @@ export default class ProductDetailPage extends Component {
                 this.setState({ product : data})
                 console.log(this.state.product)
             })
+    }
+
+    onClickAddToCart(prdNo, prdName, prdPrice){
+
+        if(!localStorage.getItem('loggedInUser')){
+            this.setState({cartAlert : 
+                <Alert variant="danger">
+                    <Alert.Heading>You need to login!</Alert.Heading>
+                </Alert>
+            })
+            return;
+        }
+
+        let cart = [];
+        cart = !localStorage.getItem('cart') ? [] : JSON.parse(localStorage.getItem('cart'));
+        
+        cart.push({prdNo : prdNo, prdName : prdName, prdPrice : prdPrice, prdQty : 1});
+        console.log(cart);
+
+        localStorage.setItem('cart', JSON.stringify(cart));
+        console.log(localStorage.getItem('cart'));
+        alert(`${prdName} added to cart`)
+
     }
 
     render() {
@@ -48,6 +73,11 @@ export default class ProductDetailPage extends Component {
                 </Row>
                 <Row>
                     <Col>
+                        {this.state.cartAlert}
+                    </Col>
+                </Row>
+                <Row>
+                    <Col>
                         <Jumbotron>
                         <h3>{prd.name}</h3>
                         <p>
@@ -65,7 +95,7 @@ export default class ProductDetailPage extends Component {
                             <h2><NumberFormat value={prd.price} displayType={'text'} thousandSeparator={true} prefix={'IDR '} /></h2>
                             <p>{prd.desc}</p>
                             <p>
-                                <Button variant="success">Add to Cart</Button>
+                                <Button onClick={(prdNo, prdName, prdPrice) => this.onClickAddToCart(`${prd.prdNo}`, `${prd.name}`, `${prd.price}`)} variant="success">Add to Cart</Button>
                             </p>
                         </Jumbotron>
 

@@ -24,6 +24,7 @@ import LoginPage from "./components/login.component";
 import LogoutPage from "./components/logout.component";
 import CartPage from "./components/cart.component";
 import AboutPage from "./components/about.component";
+import ThanksPage from "./components/thanks.component";
 
 // import { isLoggedIn } from "./util/auth.util";
 
@@ -95,6 +96,7 @@ function App() {
                 <Route path="/product/detail/:prdno" component={ProductDetailPage} />
                 <Route path="/cart" component={CartPage} />
                 <Route path="/about" component={AboutPage} />
+                <Route path="/thanks" component={ThanksPage} />
               </Switch>
             </div>
           </Col>
